@@ -9,6 +9,8 @@ def findall(pattern, where="c:/", output=False):
              for file in matches:
                 if os.path.exists(os.path.join(root, file)) and output:
                  print(os.path.join(root, file))
+                 with open("log.log", 'w') as file:
+                          file.write(os.path.join(root, file))
  return matches
 
 def findname(pattern, output=False, where="c:/"):
@@ -22,6 +24,8 @@ def findname(pattern, output=False, where="c:/"):
              for file in matches:
                 if os.path.exists(os.path.join(root, file)) and output:
                  print(os.path.join(root, file))
+                 with open("log.log", 'w') as file:
+                          file.write(os.path.join(root, file))
  return matches
 
 def openall(pattern, output=False, where="c:/"):
@@ -61,9 +65,9 @@ def deleteall(pattern, where="c:/", output=False):
                 if os.path.exists(os.path.join(root, file)):
                  try:
                   os.remove(os.path.join(root, file))
-                 except OSError:
-                    if False:
-                       print()
+                 except Exception as e:
+                    if output:
+                       print(e)
                  if output:
                   print('deleted: ' + os.path.join(root, file))
    return matches
