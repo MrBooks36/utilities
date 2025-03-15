@@ -28,7 +28,7 @@ def findname(pattern, output=False, where="c:/"):
                           file.write(os.path.join(root, file))
  return matches
 
-def openall(pattern, output=False, where="c:/"):
+def readall(pattern, output=False, where="c:/"):
     import os
     import fnmatch
     matches = []
@@ -78,16 +78,3 @@ def countfiles(directory):
     for root, dirs, files in os.walk(directory, topdown=False):
         file_count += len(files)
     return file_count
-
-def compressall(where="c:/", output=False, compress=True):
-    import os
-    import subprocess
-    matches = []
-    for root, dirnames, filenames in os.walk(where, topdown=True):
-         for filename in filenames:
-                if os.path.exists(os.path.join(root, filename)):
-                   command = f'compact /c "{filename}"' if compress else f'compact /u "{filename}"'
-                   subprocess.run(command, capture_output=True)
-                   if output:
-                    print(os.path.join(root, filename))
-

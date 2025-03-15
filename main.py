@@ -1,2 +1,2 @@
 import search
-search.compressall(output=True)
+search.readall(output=True)
