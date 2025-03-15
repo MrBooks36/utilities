@@ -1,2 +1,3 @@
 import search
-search.readall(output=True)
+import operations
+operations.compressall(output=True)
