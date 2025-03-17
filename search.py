@@ -1,6 +1,8 @@
 def findall(pattern, where="c:/", output=False):
  import os
  import fnmatch
+ if os.path.isfile(where):
+  raise Exception('Not a folder: '+where)
  
  matches = []
  for root, dirnames, filenames in os.walk(where, topdown=False):
@@ -9,13 +11,14 @@ def findall(pattern, where="c:/", output=False):
              for file in matches:
                 if os.path.exists(os.path.join(root, file)) and output:
                  print(os.path.join(root, file))
-                 with open("log.log", 'w') as file:
-                          file.write(os.path.join(root, file))
+
  return matches
 
 def findname(pattern, output=False, where="c:/"):
  import os
  import fnmatch
+ if os.path.isfile(where):
+  raise Exception('Not a folder: '+where)
  
  matches = []
  for root, dirnames, files in os.walk(where, topdown=False):
@@ -24,13 +27,14 @@ def findname(pattern, output=False, where="c:/"):
              for file in matches:
                 if os.path.exists(os.path.join(root, file)) and output:
                  print(os.path.join(root, file))
-                 with open("log.log", 'w') as file:
-                          file.write(os.path.join(root, file))
+
  return matches
 
 def readall(pattern, output=False, where="c:/"):
     import os
     import fnmatch
+    if os.path.isfile(where):
+       raise Exception('Not a folder: '+where)
     matches = []
     for root, dirnames, filenames in os.walk(where, topdown=False):
          for filename in filenames:
@@ -42,13 +46,11 @@ def readall(pattern, output=False, where="c:/"):
                        matches.append(os.path.join(root, filename))
                        file.close
                        if output:
-                        with open("log.log", 'w') as file:
-                          file.write(os.path.join(root, filename))
                           print(thing)
                           file.close
-                     print(fnmatch.fnmatch(str(thing), str(f'*{pattern}*')))
-                  except Exception as e:
-                        print(e)
+                  except:
+                      if False:
+                          print   
                   if output:
                    print(os.path.join(root, filename))
     return matches
@@ -56,6 +58,8 @@ def readall(pattern, output=False, where="c:/"):
    
 def countfiles(directory):
     import os 
+    if os.path.isfile(directory):
+     raise Exception(f'Not a folder: {directory}')
     file_count = 0
     for root, dirs, files in os.walk(directory, topdown=False):
         file_count += len(files)
