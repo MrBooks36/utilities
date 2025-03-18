@@ -1,3 +1,3 @@
 import search
 import operations
-search.findall()
+operations.deleteallemptyfolders(output=True)
