@@ -32,7 +32,7 @@ def findname(pattern, output=False, where="c:/"):
 
 def readall(pattern, output=False, where="c:/"):
     import os
-    import fnmatch
+    import fnmatch  
     if os.path.isfile(where):
        raise Exception('Not a folder: '+where)
     matches = []
