@@ -2,7 +2,7 @@ def findall(pattern, where="c:/", output=False):
  import os
  import fnmatch
  if os.path.isfile(where):
-  raise Exception('Not a folder: '+where)
+  print('Not a folder: '+where)
  
  matches = []
  for root, dirnames, filenames in os.walk(where, topdown=False):
@@ -18,7 +18,7 @@ def findname(pattern, output=False, where="c:/"):
  import os
  import fnmatch
  if os.path.isfile(where):
-  raise Exception('Not a folder: '+where)
+  print('Not a folder: '+where)
  
  matches = []
  for root, dirnames, files in os.walk(where, topdown=False):
@@ -34,7 +34,7 @@ def readall(pattern, output=False, where="c:/"):
     import os
     import fnmatch  
     if os.path.isfile(where):
-       raise Exception('Not a folder: '+where)
+       print('Not a folder: '+where)
     matches = []
     for root, dirnames, filenames in os.walk(where, topdown=False):
          for filename in filenames:
@@ -56,10 +56,19 @@ def readall(pattern, output=False, where="c:/"):
     return matches
 
    
-def countfiles(directory):
+def countfiles(directory='c:/'):
     import os 
     if os.path.isfile(directory):
-     raise Exception(f'Not a folder: '+directory)
+     print(f'Not a folder: '+directory)
+    file_count = 0
+    for root, dirs, files in os.walk(directory, topdown=False):
+        file_count += len(files)
+    return file_count
+
+def countfolders(directory='c:/'):
+    import os 
+    if os.path.isfile(directory):
+     print(f'Not a folder: '+directory)
     file_count = 0
     for root, dirs, files in os.walk(directory, topdown=False):
         file_count += len(files)
