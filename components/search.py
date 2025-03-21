@@ -48,9 +48,9 @@ def readall(pattern, output=False, where="c:/"):
                        if output:
                           print(thing)
                           file.close
-                  except:
-                      if False:
-                          print   
+                  except Exception as e:
+                      if output:
+                          print(e)   
                   if output:
                    print(os.path.join(root, filename))
     return matches
@@ -59,7 +59,7 @@ def readall(pattern, output=False, where="c:/"):
 def countfiles(directory):
     import os 
     if os.path.isfile(directory):
-     raise Exception(f'Not a folder: {directory}')
+     raise Exception(f'Not a folder: '+directory)
     file_count = 0
     for root, dirs, files in os.walk(directory, topdown=False):
         file_count += len(files)
