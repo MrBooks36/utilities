@@ -1,5 +1,5 @@
-import components.operations
-import components.search
+from components.operations import *
+from components.search import *
 from sys import argv
 from os import getcwd
 
@@ -15,12 +15,12 @@ def setpath(check):
 def count(check, path):
  if check[0] == 'count':
    if len(check) > 1:
-    if check[1] == "files": print(str(components.search.countfiles(where=path if path else getcwd()))+' files')
-    elif check[1] =='folders': print(str(components.search.countfolders(where=path if path else getcwd()))+' folders')   
+    if check[1] == "files": print(str(countfiles(where=path)))+' files'
+    elif check[1] =='folders': print(str(countfolders(where=path)))+' folders'   
     elif check[1] =='all':
      num = []
-     num1 = str(components.search.countfiles(where=path if path else getcwd()))+' files'
-     num2 = str(components.search.countfolders(where=path if path else getcwd()))+' folders'   
+     num1 = str(countfiles(where=path))+' files'
+     num2 = str(countfolders(where=path))+' folders'
      num.append(str(num1))
      num.append(str(num2))
      print(num)
@@ -29,13 +29,13 @@ def count(check, path):
 def search(check, path):
  if check[0] == 'find':
    if not len(check) < 3:
-    if check[1] == 'path': print(components.search.findpaths(pattern=check[2], where=path if path else getcwd()))
-    elif check[1] == 'name': print(components.search.findname(pattern=check[2], where=path if path else getcwd()))
-    elif check[1] == 'content': print(components.search.readall(pattern=check[2], where=path if path else getcwd()))
+    if check[1] == 'path': print(findpaths(pattern=check[2], where=path))
+    elif check[1] == 'name': print(findname(pattern=check[2], where=path))
+    elif check[1] == 'content': print(readall(pattern=check[2], where=path))
     elif check[1] == 'all':
      output = []
-     output1 = str(components.search.readall(pattern=check[2], where=path if path else getcwd()))
-     output2 = str(components.search.findpaths(pattern=check[2], where=path if path else getcwd()))
+     output1 = str(readall(pattern=check[2], where=path))
+     output2 = str(findpaths(pattern=check[2], where=path))
      output.append(output1)
      output.append(output2)
      print(output)
@@ -43,10 +43,10 @@ def search(check, path):
    else: print('Please Specify Search Item')
 
 def rmemptyfolder(check, path):
- if check[0] == 'rmef': print(components.operations.deleteallemptyfolders(where=path if path else getcwd()))
+ if check[0] == 'rmef': print(deleteallemptyfolders(where=path))
 
 def delete(check, path):
- if check[0] == 'delete': print(components.operations.deleteall(pattern=check[1], where=path if path else getcwd()))
+ if check[0] == 'delete': print(deleteall(pattern=check[1], where=path))
 
 
 def main():
@@ -57,6 +57,7 @@ def main():
   if opath:
    text = input('///')
    tokens = text.split()
+  else: opath = getcwd() 
   count(tokens, opath)
   search(tokens, opath)
   delete(tokens, opath)
