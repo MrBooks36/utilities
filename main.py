@@ -1,69 +1,104 @@
-from components.operations import *
-from components.search import *
+from components.operations import deleteallemptyfolders, deleteall
+from components.search import findpaths, findname, readall, countfiles, countfolders
 from sys import argv
 from os import getcwd
 
-def setpath(check):
- if check[0] == 'path':
-   if len(check) > 1:
-    path = check[1]
-    print('Path Set To: '+path)
-    return path
-   else: print('Please Specify Path')
- else: return None
+def set_path(command):
+    if command[0] == 'path':
+        if len(command) > 1:
+            path = command[1]
+            print(f'Path Set To: {path}')
+            return path
+        else:
+            print('Please Specify Path')
+    return None
 
-def count(check, path):
- if check[0] == 'count':
-   if len(check) > 1:
-    if check[1] == "files": print(str(countfiles(where=path)))+' files'
-    elif check[1] =='folders': print(str(countfolders(where=path)))+' folders'   
-    elif check[1] =='all':
-     num = []
-     num1 = str(countfiles(where=path))+' files'
-     num2 = str(countfolders(where=path))+' folders'
-     num.append(str(num1))
-     num.append(str(num2))
-     print(num)
-   else: print('Please Specify Type')
+def execute_count(command, path):
+    if command[0] == 'count':
+        if len(command) > 1:
+            if command[1] == "files":
+                print(f'{countfiles(where=path)} files')
+            elif command[1] == 'folders':
+                print(f'{countfolders(where=path)} folders')   
+            elif command[1] == 'all':
+                print([
+                    f'{countfiles(where=path)} files',
+                    f'{countfolders(where=path)} folders'
+                ])
+        else:
+            print('Please Specify Type')
 
-def search(check, path):
- if check[0] == 'find':
-   if not len(check) < 3:
-    if check[1] == 'path': print(findpaths(pattern=check[2], where=path))
-    elif check[1] == 'name': print(findname(pattern=check[2], where=path))
-    elif check[1] == 'content': print(readall(pattern=check[2], where=path))
-    elif check[1] == 'all':
-     output = []
-     output1 = str(readall(pattern=check[2], where=path))
-     output2 = str(findpaths(pattern=check[2], where=path))
-     output.append(output1)
-     output.append(output2)
-     print(output)
-    else: print('Please Specify Search Item')
-   else: print('Please Specify Search Item')
+def execute_search(command, path):
+    if command[0] == 'find' and len(command) >= 3:
+        pattern = command[2]
+        if command[1] == 'path':
+            print(findpaths(pattern=pattern, where=path))
+        elif command[1] == 'name':
+            print(findname(pattern=pattern, where=path))
+        elif command[1] == 'content':
+            print(readall(pattern=pattern, where=path))
+        elif command[1] == 'all':
+            print([
+                readall(pattern=pattern, where=path),
+                findpaths(pattern=pattern, where=path)
+            ])
+        else:
+            print('Please Specify Search Item')
+    else:
+        print('Please Specify Search Item')
 
-def rmemptyfolder(check, path):
- if check[0] == 'rmef': print(deleteallemptyfolders(where=path))
+def remove_empty_folders(command, path):
+    if command[0] == 'rmef':
+        print(deleteallemptyfolders(where=path))
 
-def delete(check, path):
- if check[0] == 'delete': print(deleteall(pattern=check[1], where=path))
+def execute_delete(command, path):
+    if command[0] == 'delete' and len(command) > 1:
+        print(deleteall(pattern=command[1], where=path))
 
+def process_commands(path):
+    while True:
+        text = input('/// ')
+        if not text:
+            break
+        tokens = text.split()
+        execute_count(tokens, path)
+        execute_search(tokens, path)
+        execute_delete(tokens, path)
+        remove_empty_folders(tokens, path)
 
 def main():
- if len(argv) > 1:
-  tokens = argv
-  del tokens[0]
-  opath = setpath(tokens)
-  if opath:
-   text = input('///')
-   tokens = text.split()
-  else: opath = getcwd() 
-  count(tokens, opath)
-  search(tokens, opath)
-  delete(tokens, opath)
-  rmemptyfolder(tokens, opath)
- else: print('Please Specify Command')
+    if len(argv) > 1:
+        tokens = argv[1:]
+        current_path = set_path(tokens) or getcwd()
+        process_commands(current_path)
+    else:
+        print('''Command
+├── [set] path <directory>
+│   └── Sets the current working directory for operations.
+│
+├── count <type>
+│   ├── files
+│   │   └── Counts the number of files in the specified directory.
+│   ├── folders
+│   │   └── Counts the number of folders in the specified directory.
+│   └── all
+│       └── Counts the number of both files and folders in the specified directory.
+│
+├── find <criterion> <pattern>
+│   ├── path
+│   │   └── Searches for paths matching the specified pattern.
+│   ├── name
+│   │   └── Searches for files/folders names matching the specified pattern.
+│   ├── content
+│   │   └── Searches for file content matching the specified pattern.
+│   └── all
+│       └── Searches for path and content matching the specified pattern.
+│
+├── delete <pattern>
+│   └── Deletes all items matching the specified pattern in the directory.
+│
+└── rmef
+    └── Remove all empty folders in the specified directory.''')
 
-
-
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+    main()
